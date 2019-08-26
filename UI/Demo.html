@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Choice</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+<body onload="show();">
+        <style>
+                body{
+                  background-color:#9053c7;
+                  display: flex;
+                  flex-wrap: wrap;
+                  justify-content: center;
+                   align-items: center;
+                  padding: 15px;
+                  height:100%;
+                  width:100%;
+                  background-image: repeating-radial-gradient( #ee85e7, #798df0 );
+                }
+                #cor{
+                    text-align: center;
+                    background-color:white;
+                }
+                #br{
+                    text-align: center;
+                    background-color:white;
+
+                }
+                #sm{
+                    text-align: center;
+                    background-color:white;
+
+                }
+                #c1{
+                    margin-top: 28%;
+                    margin-left:6%;
+                    height:200px;
+                    width:350px;
+                    border-radius:10px;
+               
+                }
+                #im{
+                    margin-left: 80px;
+                    margin-top:80px;
+                    width:auto;
+                    border-radius:20px;
+                    
+                }
+                #r{
+                    background-color:rgb(148, 100, 144,0.7);
+                    margin-top: 250px;
+                    margin-left: auto;
+                    margin-right: auto;
+                    height: 400px;
+                    width:800px;
+                    padding: 10px;
+                    border-radius: 20px;
+                    box-shadow: 8px 8px 5px rgba(10, 10, 10,0.5);
+                }
+
+            </style>
+          
+   
+        <div class="container">
+            <div class="row" id="r">
+                    <div class="col-md-6" id="im"> <img src="users.png" alt="User" height="250px" width="250px"></div>
+                <div class="col-md-6">
+        <form id=c1>
+              
+                <div class="form-group">
+              
+               <p><strong>Course : <select id="cor" name="cors" class="form-control" onchange="show1();">
+                <option value="" selected disabled hidden>Choose here</option>
+            </select>
+                 </strong></p>
+                    
+               <p> <strong>Branch :<select id="br" name="brn" class="form-control" onchange="show2();">
+                <option value="" selected disabled hidden>Choose here</option>
+            </select> </strong> </p> 
+                     
+               <p> <strong>Semester :  <select id="sm" name="sems" class="form-control"  >
+                <option value="" selected disabled hidden>Choose here</option>
+           </select>    </strong><p>
+                   
+            </div>
+            </form>
+            </div>
+</div>
+</div>
+            <script>
+                    function show()
+                    {
+                       
+                      var xmlhttp = new XMLHttpRequest();
+                      var data;
+                      
+                      xmlhttp.onreadystatechange = function () 
+                      {
+                       if (xmlhttp.readyState == 4 && xmlhttp.status == 200) 
+                        {
+                                      data = JSON.parse(xmlhttp.response);
+                                      Show(data);
+                
+                        }
+                    }
+                        xmlhttp.open("GET","http://127.0.0.1:8000/data/", true);
+                        xmlhttp.send();
+                    }
+                    
+                
+                
+                    function Show(d)
+                     {
+                           var i;
+                           cor.innerHTML="<option selected disabled hidden>Choose here</option>";
+                           for(i=0; i<d.length; i++)
+                           {
+                            var opt = document.createElement('option');
+                            opt.appendChild( document.createTextNode(d[i].course) );
+                            opt.value = d[i].course;
+                            cor.appendChild(opt);
+                          }
+                    }
+                    function show1()
+                    {
+                       var x=document.getElementById('cor').value;
+                      var xmlhttp = new XMLHttpRequest();
+                      var data;
+                      var url="http://127.0.0.1:8000/data/";
+                        var params="CD="+x;
+                      xmlhttp.onreadystatechange = function () 
+                      {
+                       if (xmlhttp.readyState == 4 && xmlhttp.status == 200) 
+                        {
+                                      data = JSON.parse(xmlhttp.response);
+                                      Show1(data);
+                
+                        }
+                    }    
+                       
+                        xmlhttp.open("GET",url+"?"+params, true);
+                        xmlhttp.send();
+                    }
+                    
+                
+                
+                    function Show1(d)
+                     {
+                           var i;
+                           id1=d[0].linkA__id;
+                           br.innerHTML="<option selected disabled hidden>Choose here</option>";
+                           for(i=0; i<d.length; i++)
+                           {
+                            var opt = document.createElement('option');
+                            opt.appendChild( document.createTextNode(d[i].branch) );
+                            opt.value = d[i].branch;
+                            br.appendChild(opt);
+                          }
+                    }
+                    function show2()
+                    { 
+                       var x=document.getElementById('br').value;
+                      var xmlhttp = new XMLHttpRequest();
+                      var data;
+                      var url="http://127.0.0.1:8000/data/";
+                      var params="BD="+x+"&ID="+id1;
+                      xmlhttp.onreadystatechange = function () 
+                      {
+                       if (xmlhttp.readyState == 4 && xmlhttp.status == 200) 
+                        {
+                                      data = JSON.parse(xmlhttp.response);
+                                      Show2(data);
+                
+                        }
+                       
+                    }
+                        xmlhttp.open("GET",url+"?"+params, true);
+                        xmlhttp.send();
+                    }
+                    
+                
+                
+                    function Show2(d)
+                     {
+                           var i;
+                           sm.innerHTML="<option selected disabled hidden>Choose here</option>";
+                           for(i=0; i<d.length; i++)
+                           {
+                            var opt = document.createElement('option');
+                            opt.appendChild( document.createTextNode(d[i].semester) );
+                            opt.value = d[i].semester;
+                            sm.appendChild(opt);
+                          }
+                    }
+                    </script>
+             
+              
+              </body>
+              </html>
+                      
